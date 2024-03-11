@@ -2,6 +2,7 @@ import { z } from "zod";
 
 const ENVIRONMENT_SCHEMA = z.object({
   HTTP_SERVER_PORT: z.coerce.number().default(3000),
+  DATABASE_URL: z.string(),
 });
 
 const parsedEnv = ENVIRONMENT_SCHEMA.safeParse(process.env);
