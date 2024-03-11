@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+  api:
+    container_name: api-real-time-chat
+    build: .
+    ports:
+      - 3000:3000
+      - 5555:5555
+    volumes:
+      - ./:/home/node/app
+    networks:
+      - real-time-chat-net
+
+  redis:
+    container_name: redis-real-time-chat
+    image: bitnami/redis:7.2.4
+    ports:
+      - 6379:6379
+    volumes:
+      - redis_data:/bitnami/redis
+    environment:
+      - REDIS_PASSWORD=redis-password-docker
+    networks:
+      - real-time-chat-net
+
+  mongodb:
+    container_name: mongodb-real-time-chat
+    image: bitnami/mongodb:7.0.6
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data:/bitnami/mongodb
+    environment:
+      - MONGODB_ROOT_USER=mongodb-user-docker
+      - MONGODB_ROOT_PASSWORD=mongodb-password-docker
+    networks:
+      - real-time-chat-net
+
+networks:
+  real-time-chat-net:
+    driver: bridge
+
+volumes:
+  mongodb_data:
+  redis_data:
