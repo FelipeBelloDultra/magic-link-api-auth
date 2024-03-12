@@ -3,7 +3,7 @@ version: "3.8"
 services:
   api:
     container_name: api-real-time-chat
-    build: .
+    build: ./.docker/api
     ports:
       - 3000:3000
       - 5555:5555
@@ -26,14 +26,16 @@ services:
 
   mongodb:
     container_name: mongodb-real-time-chat
-    image: bitnami/mongodb:7.0.6
+    build: ./.docker/mongo
     ports:
       - 27017:27017
     volumes:
-      - mongodb_data:/bitnami/mongodb
+      - mongodb_data:/data/db
     environment:
-      - MONGODB_ROOT_USER=mongodb-user-docker
-      - MONGODB_ROOT_PASSWORD=mongodb-password-docker
+      MONGO_INITDB_ROOT_PASSWORD: docker-password-docker
+      MONGO_INITDB_ROOT_USERNAME: docker-username-docker
+      MONGO_REPLICA_HOST: mongodb
+      MONGODB_DATABASE: real-time-chat
     networks:
       - real-time-chat-net
 
