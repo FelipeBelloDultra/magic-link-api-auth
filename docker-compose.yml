@@ -39,6 +39,22 @@ services:
     networks:
       - real-time-chat-net
 
+  mailpit:
+    image: axllent/mailpit
+    container_name: mailpit-real-time-chat
+    environment:
+      MP_DATA_FILE: /data/mailpit.db
+      MP_UI_BIND_ADDR: 0.0.0.0:8025
+      MP_SMTP_AUTH_ACCEPT_ANY: "true"
+      MP_SMTP_AUTH_ALLOW_INSECURE: "true"
+      TZ: America/Sao_Paulo
+    ports:
+      - 8025:8025
+    volumes:
+      - mailpit_data:/data
+    networks:
+      - real-time-chat-net
+
 networks:
   real-time-chat-net:
     driver: bridge
@@ -46,3 +62,4 @@ networks:
 volumes:
   mongodb_data:
   redis_data:
+  mailpit_data:
