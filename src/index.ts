@@ -1,6 +1,6 @@
 import { app } from "~/infra/http/server";
 
-import { env } from "~/config/env";
+import { env } from "~/config";
 
 app
   .listen({
