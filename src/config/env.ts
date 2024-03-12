@@ -6,6 +6,7 @@ const ENVIRONMENT_SCHEMA = z.object({
   REDIS_PORT: z.coerce.number().default(6379),
   REDIS_HOST: z.string(),
   REDIS_PASSWORD: z.string(),
+  AVATAR_PLACEHOLDER_URL: z.string(),
 });
 
 const parsedEnv = ENVIRONMENT_SCHEMA.safeParse(process.env);

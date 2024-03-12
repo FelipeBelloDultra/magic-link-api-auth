@@ -4,6 +4,7 @@ import { env } from "~/config";
 
 app
   .listen({
+    host: "0.0.0.0",
     port: env.HTTP_SERVER_PORT,
   })
   .then(() => {

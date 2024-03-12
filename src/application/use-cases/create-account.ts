@@ -1,5 +1,7 @@
 import { AccountRepository } from "../repository/account-repository";
 
+import { EmailAlreadyUsedError } from "./errors/email-alreay-used-error";
+
 interface CreateAccountRequest {
   name: string;
   email: string;
@@ -17,7 +19,7 @@ export class CreateAccount {
     const account = await this.accountRepository.findByEmail(email);
 
     if (account) {
-      throw new Error("Account already exists");
+      throw new EmailAlreadyUsedError();
     }
 
     await this.accountRepository.create({
