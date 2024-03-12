@@ -15,6 +15,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@fastify/cors": "^9.0.1",
     "@prisma/client": "^5.10.2",
     "bullmq": "^5.4.2",
     "fastify": "^4.26.2",

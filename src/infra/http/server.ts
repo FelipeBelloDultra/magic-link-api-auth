@@ -1,9 +1,11 @@
-import Fastify, { FastifyInstance } from "fastify";
+import { app } from "~/infra/http/app";
 
-const fastify = Fastify();
+import { env } from "~/config";
 
-fastify.get("/", (request, reply) => {
-  reply.send({ ok: true });
-});
-
-export const app = fastify;
+app
+  .listen({
+    port: env.HTTP_SERVER_PORT,
+  })
+  .then(() => {
+    console.log(`[🚀]: listening on port ${env.HTTP_SERVER_PORT}`);
+  });
