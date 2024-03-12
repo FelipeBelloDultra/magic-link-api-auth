@@ -1,7 +1,7 @@
 import handlebars from "handlebars";
 import nodemailer, { Transporter } from "nodemailer";
 import { resolve } from "node:path";
-import { readFile } from "node:fs/promises";
+import { createReadStream } from "node:fs";
 
 import {
   MailProvider,
@@ -37,11 +37,17 @@ export class NodemailerMailProvider implements MailProvider {
     variables?: VariablesToReplace
   ) {
     const path = resolve(__dirname, "..", "templates", emailTemplateName);
-    const file = await readFile(path, {
+    const templateStream = createReadStream(path, {
       encoding: "utf-8",
     });
 
-    const parsedTemplate = handlebars.compile(file);
+    const chunks: Buffer[] = [];
+    for await (const chunk of templateStream) {
+      chunks.push(Buffer.from(chunk));
+    }
+
+    const fileContent = Buffer.concat(chunks).toString("utf-8");
+    const parsedTemplate = handlebars.compile(fileContent);
 
     return parsedTemplate(variables);
   }
