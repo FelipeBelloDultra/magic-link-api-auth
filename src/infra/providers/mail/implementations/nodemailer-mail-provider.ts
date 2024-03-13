@@ -2,6 +2,7 @@ import handlebars from "handlebars";
 import nodemailer, { Transporter } from "nodemailer";
 import { resolve, join } from "node:path";
 import { createReadStream, createWriteStream } from "node:fs";
+import { randomUUID } from "node:crypto";
 
 import {
   MailProvider,
@@ -56,6 +57,18 @@ export class NodemailerMailProvider implements MailProvider {
     return parsedTemplate(variables);
   }
 
+  private createLocalFile({ html, to }: { to: string; html: string }) {
+    const uuid = randomUUID();
+    const filename = `${uuid}-${env.MAIL_FROM_ADDRESS}-${to}.html`;
+    const path = join(__dirname, "..", "tmp", filename);
+
+    const writableStream = createWriteStream(path, {
+      encoding: "utf-8",
+    });
+    writableStream.write(html);
+    writableStream.end();
+  }
+
   public async sendWelcomeMail(data: SendWelcomeMailData) {
     const html = await this.getEmailTemplate(MailTemplates.WelcomeUser, {
       name: data.name,
@@ -79,14 +92,10 @@ export class NodemailerMailProvider implements MailProvider {
       return;
     }
 
-    const filename = `${env.MAIL_FROM_ADDRESS}-${data.to}.html`;
-    const path = join(__dirname, "..", "tmp", filename);
-
-    const writableStream = createWriteStream(path, {
-      encoding: "utf-8",
+    this.createLocalFile({
+      html: data.html,
+      to: data.to,
     });
-    writableStream.write(data.html);
-    writableStream.end();
   }
 
   public async sendAuthenticationLinkMail(
