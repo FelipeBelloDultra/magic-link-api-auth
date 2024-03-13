@@ -5,11 +5,11 @@ import { BullQueueProvider } from "~/infra/providers/queue/implementations/bullm
 import { QUEUE_NAME } from "~/infra/queue/welcome-mail-queue";
 
 export function makeCreateAccount() {
-  const accoutRepository = new PrismaAccountRepository();
+  const accountRepository = new PrismaAccountRepository();
   const welcomeMailQueueProvider = new BullQueueProvider(QUEUE_NAME);
 
   const createAccount = new CreateAccount(
-    accoutRepository,
+    accountRepository,
     welcomeMailQueueProvider
   );
 

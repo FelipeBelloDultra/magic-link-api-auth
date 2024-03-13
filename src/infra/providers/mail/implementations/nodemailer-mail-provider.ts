@@ -103,7 +103,8 @@ export class NodemailerMailProvider implements MailProvider {
   ) {
     const html = await this.getEmailTemplate(MailTemplates.AuthenticationLink, {
       name: data.name,
-      link: data.token,
+      expiresInMinutes: data.expiresInMinutes,
+      link: data.link,
     });
 
     await this.sendMail({

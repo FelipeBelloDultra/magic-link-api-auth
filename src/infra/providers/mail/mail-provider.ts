@@ -7,7 +7,8 @@ export interface SendMailData {
 export interface SendAuthenticationLinkMailData {
   name: string;
   email: string;
-  token: string;
+  link: string;
+  expiresInMinutes: number;
 }
 
 export interface SendWelcomeMailData {
