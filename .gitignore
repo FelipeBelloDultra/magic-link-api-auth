@@ -6,3 +6,7 @@ dist
 
 # Env var
 .env
+
+# tmp mail dir
+src/infra/providers/mail/tmp/*
+!/**/.gitkeep

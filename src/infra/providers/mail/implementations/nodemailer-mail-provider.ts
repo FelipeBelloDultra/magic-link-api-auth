@@ -1,7 +1,7 @@
 import handlebars from "handlebars";
 import nodemailer, { Transporter } from "nodemailer";
-import { resolve } from "node:path";
-import { createReadStream } from "node:fs";
+import { resolve, join } from "node:path";
+import { createReadStream, createWriteStream } from "node:fs";
 
 import {
   MailProvider,
@@ -17,21 +17,23 @@ enum MailTemplates {
 }
 
 export class NodemailerMailProvider implements MailProvider {
-  private readonly transporter: Transporter;
+  private readonly transporter: Transporter | undefined = undefined;
 
   constructor() {
-    this.transporter = nodemailer.createTransport({
-      secure: false,
-      host: env.MAIL_HOST,
-      port: env.MAIL_PORT,
-      auth: {
-        user: env.MAIL_USERNAME,
-        pass: env.MAIL_PASSWORD,
-      },
-      tls: {
-        rejectUnauthorized: false,
-      },
-    });
+    if (env.MAIL_DRIVER === "mail") {
+      this.transporter = nodemailer.createTransport({
+        secure: false,
+        host: env.MAIL_HOST,
+        port: env.MAIL_PORT,
+        auth: {
+          user: env.MAIL_USERNAME,
+          pass: env.MAIL_PASSWORD,
+        },
+        tls: {
+          rejectUnauthorized: false,
+        },
+      });
+    }
   }
 
   private async getEmailTemplate<VariablesToReplace>(
@@ -67,12 +69,24 @@ export class NodemailerMailProvider implements MailProvider {
   }
 
   public async sendMail(data: SendMailData) {
-    await this.transporter.sendMail({
-      from: env.MAIL_FROM_ADDRESS,
-      to: data.to,
-      subject: data.content,
-      html: data.html,
+    if (this.transporter) {
+      await this.transporter.sendMail({
+        from: env.MAIL_FROM_ADDRESS,
+        to: data.to,
+        subject: data.content,
+        html: data.html,
+      });
+      return;
+    }
+
+    const filename = `${env.MAIL_FROM_ADDRESS}-${data.to}.html`;
+    const path = join(__dirname, "..", "tmp", filename);
+
+    const writableStream = createWriteStream(path, {
+      encoding: "utf-8",
     });
+    writableStream.write(data.html);
+    writableStream.end();
   }
 
   public async sendAuthenticationLinkMail(

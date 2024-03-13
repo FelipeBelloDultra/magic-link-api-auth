@@ -16,6 +16,7 @@ const ENVIRONMENT_SCHEMA = z.object({
   MAIL_USERNAME: z.string(),
   MAIL_PASSWORD: z.string(),
   MAIL_FROM_ADDRESS: z.string().email(),
+  MAIL_DRIVER: z.enum(["mail", "local"]).default("local"),
 });
 
 const parsedEnv = ENVIRONMENT_SCHEMA.safeParse(process.env);
