@@ -8,7 +8,9 @@
   "scripts": {
     "build": "tsup",
     "start": "node ./dist/index.js",
-    "dev": "tsx --watch --env-file=.env ./src/index.ts",
+    "dev:watch": "tsx --watch --env-file=.env ./src/index.ts",
+    "db:preview": "npx prisma studio",
+    "db:generate": "npx prisma generate",
     "test": "vitest"
   },
   "keywords": [],
