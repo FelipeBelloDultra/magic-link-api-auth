@@ -10,13 +10,12 @@ export async function create(request: FastifyRequest, reply: FastifyReply) {
   const createAccountBodySchema = z.object({
     name: z.string().max(200),
     email: z.string().email(),
-    icon_url: z.string().default(env.AVATAR_PLACEHOLDER_URL),
   });
-  const { email, icon_url, name } = createAccountBodySchema.parse(request.body);
+  const { email, name } = createAccountBodySchema.parse(request.body);
 
   try {
     const createAccount = makeCreateAccount();
-    await createAccount.execute({ email, icon_url, name });
+    await createAccount.execute({ email, icon_url: env.AVATAR_PLACEHOLDER_URL, name });
   } catch (error) {
     if (error instanceof EmailAlreadyUsedError) {
       return reply.status(409).send({
