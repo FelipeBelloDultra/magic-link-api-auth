@@ -7,11 +7,13 @@ import {
   MailProvider,
   SendMailData,
   SendAuthenticationLinkMailData,
+  SendWelcomeMailData,
 } from "../mail-provider";
 import { env } from "~/config";
 
 enum MailTemplates {
   AuthenticationLink = "authentication-link.hbs",
+  WelcomeUser = "welcome-user.hbs",
 }
 
 export class NodemailerMailProvider implements MailProvider {
@@ -52,6 +54,18 @@ export class NodemailerMailProvider implements MailProvider {
     return parsedTemplate(variables);
   }
 
+  public async sendWelcomeMail(data: SendWelcomeMailData) {
+    const html = await this.getEmailTemplate(MailTemplates.WelcomeUser, {
+      name: data.name,
+    });
+
+    await this.sendMail({
+      content: `Welcome, ${data.name}!`,
+      to: data.email,
+      html,
+    });
+  }
+
   public async sendMail(data: SendMailData) {
     await this.transporter.sendMail({
       from: env.MAIL_FROM_ADDRESS,
@@ -70,7 +84,7 @@ export class NodemailerMailProvider implements MailProvider {
     });
 
     await this.sendMail({
-      content: `Hello, ${data.name}! Your link to authenticate`,
+      content: `Hello, ${data.name}! Your link to authenticate is here.`,
       to: data.email,
       html,
     });

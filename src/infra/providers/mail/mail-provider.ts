@@ -10,9 +10,15 @@ export interface SendAuthenticationLinkMailData {
   token: string;
 }
 
+export interface SendWelcomeMailData {
+  name: string;
+  email: string;
+}
+
 export interface MailProvider {
   sendMail: (data: SendMailData) => Promise<void>;
   sendAuthenticationLinkMail: (
     data: SendAuthenticationLinkMailData
   ) => Promise<void>;
+  sendWelcomeMail: (data: SendWelcomeMailData) => Promise<void>;
 }
