@@ -20,7 +20,7 @@ export class BullQueueProvider implements QueueProvider {
 
   public async addJob<JobDataType>(jobData: JobDataType) {
     await this.queue.add("message", jobData, {
-      delay: 3000, // 3 seconds to add job to queue
+      delay: 1000 * 3, // 3 seconds to add job to queue
     });
   }
 
@@ -28,19 +28,30 @@ export class BullQueueProvider implements QueueProvider {
     new Worker(this.queueName, processFunction, {
       connection: redisConnection,
       limiter: {
-        // 1 job per 2 minutes will be processed
-        max: 1,
-        duration: 2000,
+        max: 2,
+        duration: 1000 * 2, // 2 jobs in 2 seconds will be processed
       },
     })
       .on("completed", (job) => {
-        // [TODO]: Implement logic to when job is completed
+        process.stdout.write(
+          `${this.queueName} - [${job.name}-${
+            job.id || "UNDEFINED"
+          }] - completed\n`
+        );
       })
       .on("active", (job) => {
-        // [TODO]: Implement logic to when job is active
+        process.stdout.write(
+          `${this.queueName} - [${job.name}-${
+            job.id || "UNDEFINED"
+          }] - active\n`
+        );
       })
       .on("failed", (job) => {
-        // [TODO]: Implement logic to when job failed
+        process.stdout.write(
+          `${this.queueName} - [${job?.name || "NOT_NAMED"}-${
+            job?.id || "UNDEFINED"
+          }] - failed - ${job?.failedReason}\n`
+        );
       });
   }
 }

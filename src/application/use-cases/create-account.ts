@@ -1,3 +1,4 @@
+import { QueueProvider } from "~/infra/providers/queue/queue-provider";
 import { AccountRepository } from "../repository/account-repository";
 
 import { EmailAlreadyUsedError } from "./errors/email-alreay-used-error";
@@ -9,7 +10,10 @@ interface CreateAccountRequest {
 }
 
 export class CreateAccount {
-  constructor(private readonly accountRepository: AccountRepository) {}
+  constructor(
+    private readonly accountRepository: AccountRepository,
+    private readonly welcomeMailQueueProvider: QueueProvider
+  ) {}
 
   public async execute({
     email,
@@ -26,6 +30,10 @@ export class CreateAccount {
       email,
       icon_url,
       name,
+    });
+    await this.welcomeMailQueueProvider.addJob({
+      name,
+      email,
     });
   }
 }
