@@ -58,8 +58,9 @@ export class NodemailerMailProvider implements MailProvider {
   }
 
   private createLocalFile({ html, to }: { to: string; html: string }) {
+    const timestamp = Date.now();
     const uuid = randomUUID();
-    const filename = `${uuid}-${env.MAIL_FROM_ADDRESS}-${to}.html`;
+    const filename = `${timestamp}-${uuid}-${env.MAIL_FROM_ADDRESS}-${to}.html`;
     const path = join(__dirname, "..", "tmp", filename);
 
     const writableStream = createWriteStream(path, {
