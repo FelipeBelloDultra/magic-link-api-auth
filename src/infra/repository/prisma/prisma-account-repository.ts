@@ -1,7 +1,7 @@
 import { Account, Prisma } from "@prisma/client";
 
 import { prisma } from "~/infra/database/connection";
-import { AccountRepository } from "../account-repository";
+import { AccountRepository } from "~/application/repository/account-repository";
 
 export class PrismaAccountRepository implements AccountRepository {
   public async create({

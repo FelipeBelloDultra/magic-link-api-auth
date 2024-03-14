@@ -1,7 +1,7 @@
 import { Prisma, AccountTokens } from "@prisma/client";
 
 import { prisma } from "~/infra/database/connection";
-import { AccountTokenRepository } from "../account-token-repository";
+import { AccountTokenRepository } from "~/application/repository/account-token-repository";
 
 export class PrismaAccountTokenRepository implements AccountTokenRepository {
   public async create(
