@@ -17,20 +17,21 @@ export class AuthenticateAccount {
 
   public async execute({ email }: AuthenticateAccountRequest): Promise<void> {
     const account = await this.accountRepository.findByEmail(email);
-
     if (!account) {
       return;
     }
 
-    const token = randomUUID();
-    const date = new Date();
+    const GENERATED_TOKEN = randomUUID();
+    const CURRENT_DATE = new Date();
     const EXPIRES_MINUTES = 15;
-    date.setMinutes(date.getMinutes() + EXPIRES_MINUTES); // Current date + 15 minutes
+    CURRENT_DATE.setMinutes(CURRENT_DATE.getMinutes() + EXPIRES_MINUTES); // Current date + 15 minutes
 
+    await this.accountTokenRepository.invalidateManyByEmail(account.email);
     const accountToken = await this.accountTokenRepository.create({
-      email,
-      token,
-      expires_at: date,
+      email: account.email,
+      account_id: account.id,
+      token: GENERATED_TOKEN,
+      expires_at: CURRENT_DATE,
     });
 
     await this.authenticateMailQueueProvider.addJob({

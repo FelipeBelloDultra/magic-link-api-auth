@@ -17,4 +17,18 @@ export class PrismaAccountTokenRepository implements AccountTokenRepository {
       where: { token },
     });
   }
+
+  public async invalidateManyByEmail(email: string): Promise<void> {
+    await prisma.accountTokens.updateMany({
+      where: {
+        email,
+        AND: {
+          is_valid: true,
+        },
+      },
+      data: {
+        is_valid: false,
+      },
+    });
+  }
 }
