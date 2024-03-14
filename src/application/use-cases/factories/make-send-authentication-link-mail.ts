@@ -1,12 +1,7 @@
-import { NodemailerMailProvider } from "~/infra/providers/mail/implementations/nodemailer-mail-provider";
+import { container } from "tsyringe";
 
 import { SendAuthenticationLinkMail } from "../send-authentication-link-mail";
 
 export function makeSendAuthenticationLinkMail() {
-  const nodemailerMailProvider = new NodemailerMailProvider();
-  const sendAuthenticationLinkMail = new SendAuthenticationLinkMail(
-    nodemailerMailProvider
-  );
-
-  return sendAuthenticationLinkMail;
+  return container.resolve(SendAuthenticationLinkMail);
 }

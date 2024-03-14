@@ -1,6 +1,6 @@
+import { inject, injectable } from "tsyringe";
 import jsonwebtoken from "jsonwebtoken";
 
-import { AccountRepository } from "../repository/account-repository";
 import { AccountTokenRepository } from "../repository/account-token-repository";
 
 import { InvalidTokenError } from "./errors/invalid-token-error";
@@ -12,8 +12,10 @@ interface VerifyTokenRequest {
   token: string;
 }
 
+@injectable()
 export class VerifyToken {
   constructor(
+    @inject("AccountTokenRepository")
     private readonly accountTokenRepository: AccountTokenRepository
   ) {}
 

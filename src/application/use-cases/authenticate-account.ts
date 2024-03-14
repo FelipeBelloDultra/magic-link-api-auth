@@ -1,6 +1,7 @@
+import { inject, injectable } from "tsyringe";
 import { randomUUID } from "node:crypto";
 
-import { QueueProvider } from "~/infra/providers/queue/queue-provider";
+import { AuthenticateMailQueueProvider } from "~/infra/providers/queue/queues/authenticate-mail-queue-provider";
 import { AccountRepository } from "../repository/account-repository";
 import { AccountTokenRepository } from "../repository/account-token-repository";
 
@@ -8,11 +9,17 @@ interface AuthenticateAccountRequest {
   email: string;
 }
 
+@injectable()
 export class AuthenticateAccount {
   constructor(
+    @inject("AccountRepository")
     private readonly accountRepository: AccountRepository,
+
+    @inject("AccountTokenRepository")
     private readonly accountTokenRepository: AccountTokenRepository,
-    private readonly authenticateMailQueueProvider: QueueProvider
+
+    @inject("AuthenticateMailQueueProvider")
+    private readonly authenticateMailQueueProvider: AuthenticateMailQueueProvider
   ) {}
 
   public async execute({ email }: AuthenticateAccountRequest): Promise<void> {

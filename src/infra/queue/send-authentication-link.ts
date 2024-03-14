@@ -1,10 +1,11 @@
+import { container } from "tsyringe";
+
 import { makeSendAuthenticationLinkMail } from "~/application/use-cases/factories/make-send-authentication-link-mail";
+import { AuthenticateMailQueueProvider } from "../providers/queue/queues/authenticate-mail-queue-provider";
 
-import { BullQueueProvider } from "~/infra/providers/queue/implementations/bullmq-queue-provider";
-
-export const QUEUE_NAME = "send-authentication-link-mail-queue";
-
-const authenticationLinkMailQueueProvider = new BullQueueProvider(QUEUE_NAME);
+const authenticationLinkMailQueueProvider = container.resolve(
+  AuthenticateMailQueueProvider
+);
 const sendAuthenticationLinkMail = makeSendAuthenticationLinkMail();
 
 authenticationLinkMailQueueProvider.process<{

@@ -1,4 +1,6 @@
-import { QueueProvider } from "~/infra/providers/queue/queue-provider";
+import { inject, injectable } from "tsyringe";
+
+import { WelcomeMailQueueProvider } from "~/infra/providers/queue/queues/welcome-mail-queue-provider";
 import { AccountRepository } from "../repository/account-repository";
 
 import { EmailAlreadyUsedError } from "./errors/email-alreay-used-error";
@@ -9,10 +11,14 @@ interface CreateAccountRequest {
   icon_url: string;
 }
 
+@injectable()
 export class CreateAccount {
   constructor(
+    @inject("AccountRepository")
     private readonly accountRepository: AccountRepository,
-    private readonly welcomeMailQueueProvider: QueueProvider
+
+    @inject("WelcomeMailQueueProvider")
+    private readonly welcomeMailQueueProvider: WelcomeMailQueueProvider
   ) {}
 
   public async execute({

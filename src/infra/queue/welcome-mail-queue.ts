@@ -1,10 +1,9 @@
+import { container } from "tsyringe";
+
 import { makeSendWelcomeMail } from "~/application/use-cases/factories/make-send-welcome-mail";
+import { WelcomeMailQueueProvider } from "../providers/queue/queues/welcome-mail-queue-provider";
 
-import { BullQueueProvider } from "~/infra/providers/queue/implementations/bullmq-queue-provider";
-
-export const QUEUE_NAME = "welcome-mail-queue";
-
-const welcomeMailQueueProvider = new BullQueueProvider(QUEUE_NAME);
+const welcomeMailQueueProvider = container.resolve(WelcomeMailQueueProvider);
 const sendWelcomeMail = makeSendWelcomeMail();
 
 welcomeMailQueueProvider.process<{ name: string; email: string }>(

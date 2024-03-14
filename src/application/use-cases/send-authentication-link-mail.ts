@@ -1,3 +1,5 @@
+import { inject, injectable } from "tsyringe";
+
 import { MailProvider } from "~/infra/providers/mail/mail-provider";
 
 import { env } from "~/config";
@@ -9,8 +11,12 @@ interface SendAuthenticationLinkMailRequest {
   token: string;
 }
 
+@injectable()
 export class SendAuthenticationLinkMail {
-  constructor(private readonly mailProvider: MailProvider) {}
+  constructor(
+    @inject("MailProvider")
+    private readonly mailProvider: MailProvider
+  ) {}
 
   public async execute({
     email,
