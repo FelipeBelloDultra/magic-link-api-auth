@@ -19,7 +19,9 @@ model Account {
 model AccountTokens {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
   email      String
+  account_id String
   token      String   @unique
+  is_valid   Boolean  @default(true)
   expires_at DateTime
   created_at DateTime @default(now())
 }

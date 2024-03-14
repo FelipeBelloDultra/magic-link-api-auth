@@ -19,6 +19,8 @@ const ENVIRONMENT_SCHEMA = z.object({
   MAIL_DRIVER: z.enum(["mail", "local"]).default("local"),
 
   APP_DOMAIN: z.string(),
+
+  JWT_SECRET: z.string(),
 });
 
 const parsedEnv = ENVIRONMENT_SCHEMA.safeParse(process.env);
