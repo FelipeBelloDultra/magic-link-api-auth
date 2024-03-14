@@ -18,7 +18,7 @@ const ENVIRONMENT_SCHEMA = z.object({
   MAIL_FROM_ADDRESS: z.string().email(),
   MAIL_DRIVER: z.enum(["mail", "local"]).default("local"),
 
-  APP_DOMAIN: z.string(),
+  FRONTEND_DOMAIN: z.string(),
 
   JWT_SECRET: z.string(),
 });

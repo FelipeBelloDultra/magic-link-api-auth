@@ -24,7 +24,7 @@ export class VerifyToken {
     }
 
     const CURRENT_DATE = new Date();
-    if (accountToken.expires_at.getTime() > CURRENT_DATE.getTime()) {
+    if (CURRENT_DATE.getTime() > accountToken.expires_at.getTime()) {
       throw new TokenExpiredError();
     }
 
@@ -39,8 +39,10 @@ export class VerifyToken {
       }
     );
 
+    await this.accountTokenRepository.invalidateOneByToken(accountToken.token);
+
     return {
-      token: jwt,
+      authenticated_token: jwt,
     };
   }
 }

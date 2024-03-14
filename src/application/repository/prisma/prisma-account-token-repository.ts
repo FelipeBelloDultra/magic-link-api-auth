@@ -31,4 +31,15 @@ export class PrismaAccountTokenRepository implements AccountTokenRepository {
       },
     });
   }
+
+  public async invalidateOneByToken(token: string): Promise<void> {
+    await prisma.accountTokens.update({
+      where: {
+        token,
+      },
+      data: {
+        is_valid: false,
+      },
+    });
+  }
 }

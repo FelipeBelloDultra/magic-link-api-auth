@@ -18,7 +18,7 @@ export class SendAuthenticationLinkMail {
     expiresInMinutes,
     token,
   }: SendAuthenticationLinkMailRequest): Promise<void> {
-    const link = `${env.APP_DOMAIN}/account/verify-link/${token}`;
+    const link = `${env.FRONTEND_DOMAIN}/auth/verify/${token}`;
 
     await this.mailProvider.sendAuthenticationLinkMail({
       link,
