@@ -1,5 +1,4 @@
 import { inject, injectable } from "tsyringe";
-import jsonwebtoken from "jsonwebtoken";
 
 import { AccountTokenRepository } from "../repository/account-token-repository";
 
@@ -30,21 +29,11 @@ export class VerifyToken {
       throw new TokenExpiredError();
     }
 
-    const jwt = jsonwebtoken.sign(
-      {
-        email: accountToken.email,
-        id: accountToken.id,
-      },
-      env.JWT_SECRET,
-      {
-        expiresIn: 60 * 60 * 3, // 3 hours
-      }
-    );
-
     await this.accountTokenRepository.invalidateOneByToken(accountToken.token);
 
     return {
-      authenticated_token: jwt,
+      accountId: accountToken.account_id,
+      accountEmail: accountToken.email,
     };
   }
 }

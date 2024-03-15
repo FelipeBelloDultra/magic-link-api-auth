@@ -17,10 +17,22 @@ export async function verifyToken(
 
   try {
     const verifyToken = makeVerifyToken();
-    const { authenticated_token } = await verifyToken.execute({ token });
+    const accountCredentials = await verifyToken.execute({ token });
+
+    const jwtToken = await reply.jwtSign(
+      {
+        email: accountCredentials.accountEmail,
+      },
+      {
+        sign: {
+          sub: accountCredentials.accountId,
+          expiresIn: "30m",
+        },
+      }
+    );
 
     return reply.status(200).send({
-      authenticated_token,
+      token: jwtToken,
     });
   } catch (error) {
     if (error instanceof InvalidTokenError) {

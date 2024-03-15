@@ -1,11 +1,17 @@
 import fastify from "fastify";
 import fastifyCors from "@fastify/cors";
+import fastifyJwt from "@fastify/jwt";
 import { ZodError } from "zod";
 
 import { accountRoutes } from "./controllers/accounts/routes";
 
+import { env } from "~/config";
+
 export const app = fastify();
 
+app.register(fastifyJwt, {
+  secret: env.JWT_SECRET,
+});
 app.register(fastifyCors, {
   origin: true,
   credentials: true,
