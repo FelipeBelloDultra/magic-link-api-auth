@@ -10,3 +10,6 @@ dist
 # tmp mail dir
 src/infra/providers/mail/tmp/*
 !/**/.gitkeep
+
+# Coverage file
+coverage

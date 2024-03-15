@@ -10,5 +10,5 @@
       "~/*": ["./src/*"]
     }
   },
-  "exclude": ["vitest.config.mts", "tsup.config.ts"]
+  "exclude": ["vitest.config.mts", "tsup.config.ts", "vitest-test-setup.ts"]
 }
