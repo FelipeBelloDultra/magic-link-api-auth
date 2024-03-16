@@ -1,6 +1,6 @@
 import { inject, injectable } from "tsyringe";
 
-import { WelcomeMailQueueProvider } from "~/infra/providers/queue/queues/welcome-mail-queue-provider";
+import { QueueProvider } from "~/infra/providers/queue/queue-provider";
 import { AccountRepository } from "../repository/account-repository";
 
 import { EmailAlreadyUsedError } from "./errors/email-alreay-used-error";
@@ -18,7 +18,7 @@ export class CreateAccount {
     private readonly accountRepository: AccountRepository,
 
     @inject("WelcomeMailQueueProvider")
-    private readonly welcomeMailQueueProvider: WelcomeMailQueueProvider
+    private readonly welcomeMailQueueProvider: QueueProvider
   ) {}
 
   public async execute({

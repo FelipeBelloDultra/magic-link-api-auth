@@ -47,11 +47,11 @@ describe("ShowAuthenticatedProfile", () => {
       name: "example",
     });
 
-    await expect(() => {
-      return sut.execute({
+    await expect(
+      sut.execute({
         id: "invalid-id",
         email: ACCOUNT.email,
-      });
-    }).rejects.toBeInstanceOf(ResourceNotFound);
+      })
+    ).rejects.toBeInstanceOf(ResourceNotFound);
   });
 });
