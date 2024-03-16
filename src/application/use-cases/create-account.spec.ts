@@ -22,7 +22,7 @@ describe("CreateAccount", () => {
   it("should create a new account", async () => {
     const NAME = "example";
     const EMAIL = "email@example.com";
-    const spyWelcomMailQueueProvider = vi.spyOn(
+    const spyWelcomeMailQueueProvider_addJob = vi.spyOn(
       welcomeMailQueueProvider,
       "addJob"
     );
@@ -34,23 +34,22 @@ describe("CreateAccount", () => {
         name: NAME,
       })
     ).resolves.not.toThrow();
-    expect(spyWelcomMailQueueProvider).toHaveBeenCalledWith({
+    expect(spyWelcomeMailQueueProvider_addJob).toHaveBeenCalledWith({
       name: NAME,
       email: EMAIL,
     });
   });
 
   it("should not be able to create a new account if email already exists", async () => {
-    const EMAIL = "email@example.com";
-    await accountRepository.create({
-      email: EMAIL,
+    const ACCOUNT = await accountRepository.create({
+      email: "email@example.com",
       icon_url: env.AVATAR_PLACEHOLDER_URL,
       name: "example",
     });
 
     await expect(
       sut.execute({
-        email: EMAIL,
+        email: ACCOUNT.email,
         icon_url: env.AVATAR_PLACEHOLDER_URL,
         name: "example",
       })
