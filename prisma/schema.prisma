@@ -14,6 +14,9 @@ model Account {
   icon_url   String
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
+
+  sent_messages     Message[] @relation("sent_messages")
+  received_messages Message[] @relation("received_messages")
 }
 
 model AccountTokens {
@@ -24,4 +27,15 @@ model AccountTokens {
   is_valid   Boolean  @default(true)
   expires_at DateTime
   created_at DateTime @default(now())
+}
+
+model Message {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  content     String
+  sender_id   String   @db.ObjectId
+  receiver_id String   @db.ObjectId
+  sent_at     DateTime @default(now())
+
+  sender   Account @relation("sent_messages", fields: [sender_id], references: [id])
+  receiver Account @relation("received_messages", fields: [receiver_id], references: [id])
 }
