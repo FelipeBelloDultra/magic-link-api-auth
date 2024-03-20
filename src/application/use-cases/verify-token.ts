@@ -5,8 +5,6 @@ import { AccountTokenRepository } from "../repository/account-token-repository";
 import { InvalidTokenError } from "./errors/invalid-token-error";
 import { TokenExpiredError } from "./errors/token-expired-error";
 
-import { env } from "~/config";
-
 interface VerifyTokenRequest {
   token: string;
 }
