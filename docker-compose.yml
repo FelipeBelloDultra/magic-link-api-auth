@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   api:
-    container_name: api-real-time-chat
+    container_name: api-magic-link
     build: ./.docker/api
     ports:
       - 3000:3000
@@ -10,10 +10,10 @@ services:
     volumes:
       - ./:/home/node/app
     networks:
-      - real-time-chat-net
+      - magic-link-net
 
   redis:
-    container_name: redis-real-time-chat
+    container_name: redis-magic-link
     image: bitnami/redis:7.2.4
     ports:
       - 6379:6379
@@ -22,10 +22,10 @@ services:
     environment:
       - REDIS_PASSWORD=redis-password-docker
     networks:
-      - real-time-chat-net
+      - magic-link-net
 
   mongodb:
-    container_name: mongodb-real-time-chat
+    container_name: mongodb-magic-link
     build: ./.docker/mongo
     ports:
       - 27017:27017
@@ -35,13 +35,13 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: docker-password-docker
       MONGO_INITDB_ROOT_USERNAME: docker-username-docker
       MONGO_REPLICA_HOST: mongodb
-      MONGODB_DATABASE: real-time-chat
+      MONGODB_DATABASE: magic-link
     networks:
-      - real-time-chat-net
+      - magic-link-net
 
   mailpit:
     image: axllent/mailpit
-    container_name: mailpit-real-time-chat
+    container_name: mailpit-magic-link
     environment:
       MP_DATA_FILE: /data/mailpit.db
       MP_UI_BIND_ADDR: 0.0.0.0:8025
@@ -53,10 +53,10 @@ services:
     volumes:
       - mailpit_data:/data
     networks:
-      - real-time-chat-net
+      - magic-link-net
 
 networks:
-  real-time-chat-net:
+  magic-link-net:
     driver: bridge
 
 volumes:
